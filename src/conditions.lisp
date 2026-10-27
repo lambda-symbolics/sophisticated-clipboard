@@ -8,9 +8,10 @@
 
 (define-condition clipboard-unavailable (sophisticated-clipboard-error)
   ((reason
-    :initarg  :reason
-    :initform "no clipboard backend applies to this process"
-    :reader   clipboard-unavailable-reason))
+    :initarg       :reason
+    :initform      "no clipboard backend applies to this process"
+    :reader        clipboard-unavailable-reason
+    :documentation "Why no clipboard can be reached."))
   (:report (lambda (condition stream)
              (format stream "No system clipboard is reachable: ~A."
                      (clipboard-unavailable-reason condition))))
@@ -18,9 +19,10 @@
 
 (define-condition not-installed (clipboard-unavailable)
   ((programs
-    :initarg  :programs
-    :initform nil
-    :reader   not-installed-programs))
+    :initarg       :programs
+    :initform      nil
+    :reader        not-installed-programs
+    :documentation "The helper program names that were looked for and not found."))
   (:report (lambda (condition stream)
              (format stream "None of the clipboard commands are installed: ~{~A~^, ~}."
                      (not-installed-programs condition))))
@@ -28,15 +30,18 @@
 
 (define-condition clipboard-command-failed (sophisticated-clipboard-error)
   ((command
-    :initarg :command
-    :reader  clipboard-command-failed-command)
+    :initarg       :command
+    :reader        clipboard-command-failed-command
+    :documentation "The program and arguments that were run.")
    (exit-code
-    :initarg :exit-code
-    :reader  clipboard-command-failed-exit-code)
+    :initarg       :exit-code
+    :reader        clipboard-command-failed-exit-code
+    :documentation "The exit code the command returned.")
    (output
-    :initarg  :output
-    :initform ""
-    :reader   clipboard-command-failed-output))
+    :initarg       :output
+    :initform      ""
+    :reader        clipboard-command-failed-output
+    :documentation "The error output the command wrote."))
   (:report (lambda (condition stream)
              (format stream "Clipboard command ~{~A~^ ~} exited with ~A~@[: ~A~]"
                      (clipboard-command-failed-command condition)
@@ -48,11 +53,13 @@
 
 (define-condition clipboard-unsupported-type (sophisticated-clipboard-error)
   ((mime-type
-    :initarg :mime-type
-    :reader  clipboard-unsupported-type-mime-type)
+    :initarg       :mime-type
+    :reader        clipboard-unsupported-type-mime-type
+    :documentation "The MIME type that was requested.")
    (backend
-    :initarg :backend
-    :reader  clipboard-unsupported-type-backend))
+    :initarg       :backend
+    :reader        clipboard-unsupported-type-backend
+    :documentation "The name of the backend that cannot carry the type."))
   (:report (lambda (condition stream)
              (format stream "The ~A clipboard backend cannot transfer ~A."
                      (clipboard-unsupported-type-backend condition)
