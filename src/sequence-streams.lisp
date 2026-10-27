@@ -1,4 +1,4 @@
-(in-package :sophisticated-clipboard)
+(in-package #:sophisticated-clipboard)
 
 (defmacro with-output-to-sequence ((var &key (element-type ''(unsigned-byte 8)))
                                    &body body)
