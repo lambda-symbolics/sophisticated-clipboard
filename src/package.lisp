@@ -1,4 +1,5 @@
 (defpackage #:sophisticated-clipboard
+  (:documentation "Read and write the system clipboard through portable backends.")
   (:use #:cl)
   (:export
    ;; Clipboard data types

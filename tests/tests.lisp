@@ -1,4 +1,5 @@
 (defpackage #:sophisticated-clipboard/tests
+  (:documentation "Tests for sophisticated-clipboard.")
   (:use #:cl #:fiveam)
   (:import-from #:sophisticated-clipboard
                 #:clipboard-available-p
