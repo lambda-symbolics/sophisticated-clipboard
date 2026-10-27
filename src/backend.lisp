@@ -55,6 +55,7 @@ DATA is a string for text types and an octet vector otherwise."))
   text)
 
 (defmethod print-object ((backend clipboard-backend) stream)
+  "Print BACKEND unreadably with its name."
   (print-unreadable-object (backend stream :type t)
     (format stream "~A" (clipboard-backend-name backend))))
 

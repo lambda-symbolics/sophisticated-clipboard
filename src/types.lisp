@@ -18,6 +18,7 @@
   (:documentation "One data type currently offered by a clipboard."))
 
 (defmethod print-object ((type clipboard-type) stream)
+  "Print TYPE unreadably with its MIME type."
   (print-unreadable-object (type stream :type t)
     (format stream "~A" (mime-type type))))
 

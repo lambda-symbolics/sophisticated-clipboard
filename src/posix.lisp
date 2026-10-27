@@ -50,6 +50,7 @@
   :x11)
 
 (defmethod print-object ((backend x11-backend) stream)
+  "Print BACKEND unreadably with its name and selection tool."
   (print-unreadable-object (backend stream :type t)
     (format stream "~A via ~(~A~)" (clipboard-backend-name backend)
             (x11-backend-tool backend))))
