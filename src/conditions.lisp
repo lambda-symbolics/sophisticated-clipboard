@@ -8,9 +8,9 @@
 
 (define-condition clipboard-unavailable (sophisticated-clipboard-error)
   ((reason
-    :initarg :reason
+    :initarg  :reason
     :initform "no clipboard backend applies to this process"
-    :reader clipboard-unavailable-reason))
+    :reader   clipboard-unavailable-reason))
   (:report (lambda (condition stream)
              (format stream "No system clipboard is reachable: ~A."
                      (clipboard-unavailable-reason condition))))
@@ -18,9 +18,9 @@
 
 (define-condition not-installed (clipboard-unavailable)
   ((programs
-    :initarg :programs
+    :initarg  :programs
     :initform nil
-    :reader not-installed-programs))
+    :reader   not-installed-programs))
   (:report (lambda (condition stream)
              (format stream "None of the clipboard commands are installed: ~{~A~^, ~}."
                      (not-installed-programs condition))))
@@ -29,14 +29,14 @@
 (define-condition clipboard-command-failed (sophisticated-clipboard-error)
   ((command
     :initarg :command
-    :reader clipboard-command-failed-command)
+    :reader  clipboard-command-failed-command)
    (exit-code
     :initarg :exit-code
-    :reader clipboard-command-failed-exit-code)
+    :reader  clipboard-command-failed-exit-code)
    (output
-    :initarg :output
+    :initarg  :output
     :initform ""
-    :reader clipboard-command-failed-output))
+    :reader   clipboard-command-failed-output))
   (:report (lambda (condition stream)
              (format stream "Clipboard command ~{~A~^ ~} exited with ~A~@[: ~A~]"
                      (clipboard-command-failed-command condition)
@@ -49,10 +49,10 @@
 (define-condition clipboard-unsupported-type (sophisticated-clipboard-error)
   ((mime-type
     :initarg :mime-type
-    :reader clipboard-unsupported-type-mime-type)
+    :reader  clipboard-unsupported-type-mime-type)
    (backend
     :initarg :backend
-    :reader clipboard-unsupported-type-backend))
+    :reader  clipboard-unsupported-type-backend))
   (:report (lambda (condition stream)
              (format stream "The ~A clipboard backend cannot transfer ~A."
                      (clipboard-unsupported-type-backend condition)

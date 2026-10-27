@@ -4,15 +4,15 @@
 
 (defclass terminal-backend (clipboard-backend)
   ((writer
-    :initarg :writer
-    :reader terminal-backend-writer
-    :type function
+    :initarg       :writer
+    :reader        terminal-backend-writer
+    :type          function
     :documentation "Called with each control string; returns true when a terminal received it.")
    (selection
-    :initarg :selection
-    :initform :clipboard
-    :reader terminal-backend-selection
-    :type (member :clipboard :primary)
+    :initarg       :selection
+    :initform      :clipboard
+    :reader        terminal-backend-selection
+    :type          (member :clipboard :primary)
     :documentation "The terminal selection the text is copied to."))
   (:default-initargs
    :writer (error "A terminal backend needs a :WRITER function."))
@@ -59,8 +59,10 @@ in base64, and the control ends with ST."
   (format nil "~C]52;~A;~A~C\\"
           (code-char 27)
           (ecase selection
-            (:clipboard "c")
-            (:primary "p"))
+            (:clipboard
+             "c")
+            (:primary
+             "p"))
           (cl-base64:usb8-array-to-base64-string
            (flexi-streams:string-to-octets text :external-format :utf-8))
           (code-char 27)))

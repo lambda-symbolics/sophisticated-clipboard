@@ -68,5 +68,5 @@ DATA is a string for text types and an octet vector otherwise."))
 (defun unsupported-type (backend mime-type)
   "Signal that BACKEND cannot transfer MIME-TYPE."
   (error 'clipboard-unsupported-type
-         :backend (clipboard-backend-name backend)
+         :backend   (clipboard-backend-name backend)
          :mime-type mime-type))

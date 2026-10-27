@@ -10,10 +10,10 @@ CLIPBOARD-COMMAND-FAILED unless FAILURE-VALUE is supplied, which is then
 returned instead; clipboard tools exit unsuccessfully for an empty clipboard."
   (multiple-value-bind (output error-output exit-code)
       (uiop:run-program command
-                        :input (and input (make-string-input-stream input))
-                        :output '(:string)
-                        :error-output '(:string)
-                        :external-format :utf-8
+                        :input               (and input (make-string-input-stream input))
+                        :output              '(:string)
+                        :error-output        '(:string)
+                        :external-format     :utf-8
                         :ignore-error-status t)
     (cond
       ((zerop exit-code)
@@ -22,9 +22,9 @@ returned instead; clipboard tools exit unsuccessfully for an empty clipboard."
        failure-value)
       (t
        (error 'clipboard-command-failed
-              :command command
+              :command   command
               :exit-code exit-code
-              :output error-output)))))
+              :output    error-output)))))
 
 (defun run-octet-command (command &key input (failure-value nil failure-value-p))
   "Run COMMAND and return its standard output as an octet vector.
@@ -36,24 +36,24 @@ matches RUN-TEXT-COMMAND."
         (if input
             (with-input-from-sequence (input-stream input)
               (uiop:run-program command
-                                :input input-stream
-                                :output output
-                                :error-output '(:string)
-                                :element-type '(unsigned-byte 8)
+                                :input               input-stream
+                                :output              output
+                                :error-output        '(:string)
+                                :element-type        '(unsigned-byte 8)
                                 :ignore-error-status t))
             (uiop:run-program command
-                              :output output
-                              :error-output '(:string)
-                              :element-type '(unsigned-byte 8)
+                              :output              output
+                              :error-output        '(:string)
+                              :element-type        '(unsigned-byte 8)
                               :ignore-error-status t))
       (declare (ignore ignored-output))
       (unless (zerop exit-code)
         (if failure-value-p
             (return-from run-octet-command failure-value)
             (error 'clipboard-command-failed
-                   :command command
+                   :command   command
                    :exit-code exit-code
-                   :output (if (stringp error-output) error-output "")))))))
+                   :output    (if (stringp error-output) error-output "")))))))
 
 (defun run-feeding-command (command data)
   "Run COMMAND with DATA on its standard input, discarding its output.
@@ -65,18 +65,18 @@ child, so only the exit status is observed. DATA is a string or octet vector."
           (if (stringp data)
               (nth-value 2
                          (uiop:run-program command
-                                           :input (make-string-input-stream data)
-                                           :output nil
-                                           :error-output nil
-                                           :external-format :utf-8
+                                           :input               (make-string-input-stream data)
+                                           :output              nil
+                                           :error-output        nil
+                                           :external-format     :utf-8
                                            :ignore-error-status t))
               (with-input-from-sequence (input data)
                 (nth-value 2
                            (uiop:run-program command
-                                             :input input
-                                             :output nil
-                                             :error-output nil
-                                             :element-type '(unsigned-byte 8)
+                                             :input               input
+                                             :output              nil
+                                             :error-output        nil
+                                             :element-type        '(unsigned-byte 8)
                                              :ignore-error-status t))))))
     (unless (zerop exit-code)
       (error 'clipboard-command-failed :command command :exit-code exit-code))

@@ -38,10 +38,10 @@
 
 (defclass x11-backend (clipboard-backend)
   ((tool
-    :initarg :tool
-    :initform :xclip
-    :reader x11-backend-tool
-    :type (member :xclip :xsel)
+    :initarg       :tool
+    :initform      :xclip
+    :reader        x11-backend-tool
+    :type          (member :xclip :xsel)
     :documentation "The command driving the X11 CLIPBOARD selection."))
   (:documentation "The X11 CLIPBOARD selection through xclip, or text only through xsel."))
 

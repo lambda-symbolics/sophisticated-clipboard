@@ -107,9 +107,9 @@ without a known MIME type are returned by their AppleScript name."
      (let ((class (darwin-image-class backend mime-type)))
        (uiop:with-temporary-file (:pathname pathname :type "clipboard" :keep nil)
          (with-open-file (stream pathname
-                                 :direction :output
+                                 :direction    :output
                                  :element-type '(unsigned-byte 8)
-                                 :if-exists :supersede)
+                                 :if-exists    :supersede)
            (write-sequence data stream))
          (darwin-run-applescript
           (format nil "set the clipboard to (read (POSIX file ~S) as ~A)"

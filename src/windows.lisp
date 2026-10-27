@@ -64,25 +64,34 @@ is retried a few times before signalling CLIPBOARD-UNAVAILABLE."
   (let ((entry (rest (assoc mime-type *win32-registered-format-names*
                             :test #'string=))))
     (cond
-      ((text-mime-type-p mime-type) *win32-cf-unicodetext*)
-      ((eq entry :dib) *win32-cf-dib*)
-      ((eq entry :dibv5) *win32-cf-dibv5*)
-      ((stringp entry) (win32-register-format entry))
-      (t (win32-register-format mime-type)))))
+      ((text-mime-type-p mime-type)
+       *win32-cf-unicodetext*)
+      ((eq entry :dib)
+       *win32-cf-dib*)
+      ((eq entry :dibv5)
+       *win32-cf-dibv5*)
+      ((stringp entry)
+       (win32-register-format entry))
+      (t
+       (win32-register-format mime-type)))))
 
 (defun win32-format-name (identifier)
   "Return the MIME type or registered name for clipboard format IDENTIFIER, or NIL."
   (cond
-    ((= identifier *win32-cf-unicodetext*) "text/plain;charset=utf-8")
-    ((= identifier *win32-cf-text*) "text/plain")
-    ((= identifier *win32-cf-dib*) "image/dib")
-    ((= identifier *win32-cf-dibv5*) "image/dibv5")
+    ((= identifier *win32-cf-unicodetext*)
+     "text/plain;charset=utf-8")
+    ((= identifier *win32-cf-text*)
+     "text/plain")
+    ((= identifier *win32-cf-dib*)
+     "image/dib")
+    ((= identifier *win32-cf-dibv5*)
+     "image/dibv5")
     (t
      (cffi:with-foreign-object (buffer :char 256)
        (let ((length (cffi:foreign-funcall "GetClipboardFormatNameA"
                                            :unsigned-int identifier
-                                           :pointer buffer
-                                           :int 256
+                                           :pointer      buffer
+                                           :int          256
                                            :int)))
          (when (plusp length)
            (let ((name (cffi:foreign-string-to-lisp buffer :count length)))
@@ -111,9 +120,9 @@ is retried a few times before signalling CLIPBOARD-UNAVAILABLE."
     (when (cffi:null-pointer-p pointer)
       (error 'clipboard-unavailable :reason "GlobalLock failed on clipboard memory"))
     (unwind-protect
-         (let* ((size (cffi:foreign-funcall "GlobalSize"
-                                            :pointer handle
-                                            :unsigned-long-long))
+         (let* ((size   (cffi:foreign-funcall "GlobalSize"
+                                              :pointer handle
+                                              :unsigned-long-long))
                 (octets (make-array size :element-type '(unsigned-byte 8))))
            (dotimes (index size octets)
              (setf (aref octets index) (cffi:mem-ref pointer :uint8 index))))
@@ -144,7 +153,7 @@ is retried a few times before signalling CLIPBOARD-UNAVAILABLE."
 (defun win32-allocate-global (size)
   "Allocate SIZE bytes of moveable global memory and return its handle."
   (let ((handle (cffi:foreign-funcall "GlobalAlloc"
-                                      :unsigned-int *win32-gmem-flags*
+                                      :unsigned-int       *win32-gmem-flags*
                                       :unsigned-long-long size
                                       :pointer)))
     (when (cffi:null-pointer-p handle)
@@ -170,7 +179,7 @@ is retried a few times before signalling CLIPBOARD-UNAVAILABLE."
      (when (cffi:null-pointer-p
             (cffi:foreign-funcall "SetClipboardData"
                                   :unsigned-int format
-                                  :pointer handle
+                                  :pointer      handle
                                   :pointer))
        (cffi:foreign-funcall "GlobalFree" :pointer handle :pointer)
        (error 'clipboard-unavailable :reason "SetClipboardData failed")))))

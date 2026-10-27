@@ -5,9 +5,12 @@
 (defun host-operating-system ()
   "Return :WINDOWS, :DARWIN, or :POSIX for the running host."
   (cond
-    ((uiop:os-windows-p) :windows)
-    ((uiop:os-macosx-p) :darwin)
-    (t :posix)))
+    ((uiop:os-windows-p)
+     :windows)
+    ((uiop:os-macosx-p)
+     :darwin)
+    (t
+     :posix)))
 
 (defun environment-set-p (value)
   "Return true when environment VALUE is a non-empty string."
@@ -38,7 +41,7 @@ CLIPBOARD-UNAVAILABLE, or its subtype NOT-INSTALLED, when nothing applies."
            (error 'not-installed :programs '("pbcopy" "pbpaste"))))
       (:posix
        (let ((wayland-p (environment-set-p (funcall getenv "WAYLAND_DISPLAY")))
-             (x11-p (environment-set-p (funcall getenv "DISPLAY"))))
+             (x11-p     (environment-set-p (funcall getenv "DISPLAY"))))
          (cond
            ((and wayland-p (found-p "wl-copy") (found-p "wl-paste"))
             (make-instance 'wayland-backend))

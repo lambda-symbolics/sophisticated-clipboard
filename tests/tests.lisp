@@ -52,8 +52,8 @@
   "Detect a backend for OPERATING-SYSTEM with fake environment and executables."
   (clipboard-detect-backend
    :operating-system operating-system
-   :getenv (environment-function bindings)
-   :executable-find (executables-function names)))
+   :getenv           (environment-function bindings)
+   :executable-find  (executables-function names)))
 
 (test type-classification
   (let ((cases '(("text/plain;charset=utf-8" :text "plain;charset=utf-8")
@@ -76,7 +76,7 @@
 
 (test posix-detection
   (let ((wayland '(("WAYLAND_DISPLAY" . "wayland-0") ("DISPLAY" . ":0")))
-        (x11 '(("DISPLAY" . ":0")))
+        (x11     '(("DISPLAY" . ":0")))
         (nothing '(("WAYLAND_DISPLAY" . ""))))
     (is (typep (detect :posix wayland '("wl-copy" "wl-paste" "xclip")) 'wayland-backend))
     (let ((backend (detect :posix wayland '("xclip"))))
@@ -127,7 +127,7 @@
 
 (test live-octet-round-trip
   (if (clipboard-available-p)
-      (let ((octets (make-array 300 :element-type '(unsigned-byte 8)))
+      (let ((octets  (make-array 300 :element-type '(unsigned-byte 8)))
             (backend (sophisticated-clipboard:clipboard-detect-backend)))
         (dotimes (index 300)
           (setf (aref octets index) (mod (* index 7) 256)))
@@ -196,11 +196,11 @@
   (signals error (make-instance 'terminal-backend)))
 
 (test copy-text
-  (let ((host (make-instance 'recording-backend))
+  (let ((host    (make-instance 'recording-backend))
         (written '()))
     (multiple-value-bind (host-p terminal-p condition)
         (clipboard-copy-text "hi"
-                             :backend host
+                             :backend         host
                              :terminal-writer (lambda (control) (push control written) t))
       (is-true host-p)
       (is-true terminal-p)
@@ -209,14 +209,14 @@
       (is (equal (list (osc-52 "c" "aGk=")) written))))
   (multiple-value-bind (host-p terminal-p condition)
       (clipboard-copy-text "hi"
-                           :backend (make-instance 'recording-backend :fail-p t)
+                           :backend         (make-instance 'recording-backend :fail-p t)
                            :terminal-writer (constantly t))
     (is-false host-p)
     (is (eq t terminal-p))
     (is (typep condition 'sophisticated-clipboard-error)))
   (multiple-value-bind (host-p terminal-p condition)
       (clipboard-copy-text "hi"
-                           :backend (make-instance 'recording-backend :fail-p t)
+                           :backend         (make-instance 'recording-backend :fail-p t)
                            :terminal-writer (constantly nil))
     (is-false host-p)
     (is-false terminal-p)
