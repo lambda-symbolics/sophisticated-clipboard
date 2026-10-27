@@ -9,7 +9,7 @@
   :depends-on  ("uiop"
                 "flexi-streams"
                 "cl-base64"
-                #+os-windows "cffi")
+                (:feature :os-windows "cffi"))
   :serial      t
   :components  ((:module "src"
                  :components
@@ -23,7 +23,7 @@
                   (:file "posix")
                   (:file "darwin")
                   (:file "terminal")
-                  #+os-windows (:file "windows")
+                  (:file "windows" :if-feature :os-windows)
                   (:file "detection")
                   (:file "api"))))
   :in-order-to ((test-op (test-op "sophisticated-clipboard/tests"))))
