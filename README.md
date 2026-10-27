@@ -99,15 +99,24 @@ All conditions inherit from `sophisticated-clipboard-error`:
 - `clipboard-unsupported-type`: the backend cannot carry the requested type,
   such as binary data through `xsel`
 
-## Testing
+## Development
 
-```lisp
-(asdf:test-system :sophisticated-clipboard)
+```sh
+./script/bootstrap
+./script/check
+./script/check --fix
 ```
+
+`./script/check` runs the tests, then checks the source with
+[cheque](https://github.com/lambda-symbolics/cheque) as `cheque.sexp`
+configures it. `--fix` skips the tests and repairs what cheque can repair.
+cheque and its tools are development dependencies: `checks/qlfile` lists them,
+and the check installs them on first use into `~/.cache/cheque/tools/`.
 
 Detection, type classification, and parsing are tested with replaced
 environment and executable lookups. The live round trip runs only when a
-clipboard is actually reachable and is skipped otherwise.
+clipboard is actually reachable and is skipped otherwise. In a running image,
+`(asdf:test-system :sophisticated-clipboard)` runs the tests alone.
 
 ## Authors
 
