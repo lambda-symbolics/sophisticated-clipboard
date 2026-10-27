@@ -40,7 +40,7 @@
 (defun environment-function (bindings)
   "Return a GETENV replacement answering from the alist BINDINGS."
   (lambda (name)
-    (cdr (assoc name bindings :test #'string=))))
+    (rest (assoc name bindings :test #'string=))))
 
 (defun executables-function (names)
   "Return an EXECUTABLE-FIND replacement that only finds NAMES."

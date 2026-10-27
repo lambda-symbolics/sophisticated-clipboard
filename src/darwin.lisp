@@ -46,10 +46,10 @@ without a known MIME type are returned by their AppleScript name."
                          (string-trim '(#\Space #\Newline #\Return) item))
                        (uiop:split-string output :separator ",")))
         (types nil))
-    (loop for (class size) on items by #'cddr
+    (loop for (class size) on items by (lambda (tail) (nthcdr 2 tail))
           when (and class (plusp (length class)) size)
-            do (let ((mime (or (cdr (assoc class *darwin-class-mime-types*
-                                           :test #'string=))
+            do (let ((mime (or (rest (assoc class *darwin-class-mime-types*
+                                            :test #'string=))
                                class)))
                  (pushnew mime types :test #'string=)))
     (nreverse types)))
@@ -63,7 +63,7 @@ without a known MIME type are returned by their AppleScript name."
 
 (defun darwin-image-class (backend mime-type)
   "Return the AppleScript class for image MIME-TYPE or signal unsupported."
-  (or (cdr (assoc mime-type *darwin-image-classes* :test #'string=))
+  (or (rest (assoc mime-type *darwin-image-classes* :test #'string=))
       (unsupported-type backend mime-type)))
 
 (defmethod backend-types ((backend darwin-backend))

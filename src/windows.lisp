@@ -61,8 +61,8 @@ is retried a few times before signalling CLIPBOARD-UNAVAILABLE."
 
 (defun win32-format-identifier (mime-type)
   "Return the Windows clipboard format carrying MIME-TYPE."
-  (let ((entry (cdr (assoc mime-type *win32-registered-format-names*
-                           :test #'string=))))
+  (let ((entry (rest (assoc mime-type *win32-registered-format-names*
+                            :test #'string=))))
     (cond
       ((text-mime-type-p mime-type) *win32-cf-unicodetext*)
       ((eq entry :dib) *win32-cf-dib*)
@@ -86,7 +86,7 @@ is retried a few times before signalling CLIPBOARD-UNAVAILABLE."
                                            :int)))
          (when (plusp length)
            (let ((name (cffi:foreign-string-to-lisp buffer :count length)))
-             (or (car (rassoc name *win32-registered-format-names* :test #'equal))
+             (or (first (rassoc name *win32-registered-format-names* :test #'equal))
                  name))))))))
 
 (defmethod backend-types ((backend windows-backend))
