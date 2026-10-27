@@ -152,21 +152,32 @@
   (format nil "~C]52;~A;~A~C\\" (code-char 27) selection payload (code-char 27)))
 
 (defclass recording-backend (clipboard-backend)
-  ((texts :initform nil :accessor recording-backend-texts)
-   (fail-p :initarg :fail-p :initform nil :reader recording-backend-fail-p))
+  ((texts
+    :initform      nil
+    :accessor      recording-backend-texts
+    :documentation "The texts copied so far, newest first.")
+   (fail-p
+    :initarg       :fail-p
+    :initform      nil
+    :reader        recording-backend-fail-p
+    :documentation "True when every copy signals CLIPBOARD-UNAVAILABLE."))
   (:documentation "A host backend recording copies, or refusing every one."))
 
 (defmethod clipboard-backend-name ((backend recording-backend))
+  "Name the recording backend."
   :recording)
 
 (defmethod backend-types ((backend recording-backend))
+  "Offer no types."
   nil)
 
 (defmethod backend-get ((backend recording-backend) mime-type)
+  "Return NIL for every MIME-TYPE."
   (declare (ignore mime-type))
   nil)
 
 (defmethod backend-set ((backend recording-backend) data mime-type)
+  "Record DATA, or signal CLIPBOARD-UNAVAILABLE when the backend refuses copies."
   (declare (ignore mime-type))
   (when (recording-backend-fail-p backend)
     (error 'clipboard-unavailable :reason "refused for the test"))
